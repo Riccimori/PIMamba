@@ -450,11 +450,11 @@ def read_split_data(inf_csv,train_rate):
     selected_columns = ['Img_name','Label']
     img_data = df[selected_columns]
 
-    first_row = pd.DataFrame(img_data.iloc[[0]])  # ��ȡ��һ������
-    remaining_rows = img_data.iloc[1:].reset_index(drop=True) # ��ȡ����һ���������������
+    first_row = pd.DataFrame(img_data.iloc[[0]])  
+    remaining_rows = img_data.iloc[1:].reset_index(drop=True) 
 
     # train_data = pd.concat([first_row, remaining_rows.sample(frac=0.9,random_state=1)])
-    train_data = pd.concat([first_row, remaining_rows.sample(frac=0.8)])
+    train_data = pd.concat([first_row, remaining_rows.sample(frac=0.7)])
     val_data = pd.concat([first_row, remaining_rows.drop(train_data.index)])
 
     train_data_Image = train_data['Img_name'][0:].values
@@ -475,7 +475,7 @@ def read_test_data(inf_csv):
     first_row = pd.DataFrame(img_data.iloc[[0]])
     remaining_rows = img_data.iloc[1:].reset_index(drop=True)
 
-    test_data = pd.concat([first_row, remaining_rows.sample(frac=0.5,random_state=1)])
+    test_data = pd.concat([first_row, remaining_rows.sample(frac=0.2,random_state=1)])
 
 
     test_data_Image = test_data['Img_name'][0:].values
@@ -483,15 +483,20 @@ def read_test_data(inf_csv):
 
     return test_data_Image, test_label
 
-def read_data(inf_csv):
+def read_test_data(inf_csv):
     random.seed(0)
     assert os.path.exists(inf_csv), "information_csv: {} does not exist".format(inf_csv)
     df = pd.read_csv(inf_csv,encoding='gbk',dtype=str)
     selected_columns = ['Img_name','Label']
     img_data = df[selected_columns]
 
-    test_data_Image = img_data['Img_name'].values
-    print(test_data_Image)
-    test_label = img_data['Label'].values.tolist()
+    first_row = pd.DataFrame(img_data.iloc[[0]])
+    remaining_rows = img_data.iloc[1:].reset_index(drop=True)
+
+    test_data = pd.concat([first_row, remaining_rows.sample(frac=0.1,random_state=1)])
+
+
+    test_data_Image = test_data['Img_name'][0:].values
+    test_label = test_data['Label'][0:].values.tolist()
 
     return test_data_Image, test_label
